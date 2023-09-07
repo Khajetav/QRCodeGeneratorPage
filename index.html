@@ -2,33 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Generator</title>
+    <title>QR Code Styling</title>
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
 </head>
 <body>
-    <h1>QR Code Generator</h1>
-
     <div>
         <label for="qr-data">Enter data for QR code:</label>
         <input type="text" id="qr-data" placeholder="Enter data">
-        <button onclick="generateQRCode()">Generate QR Code</button>
+        <button onclick="GenerateQRCode()">Generate QR Code</button>
     </div>
+    <div id="canvas"></div>
 
-    <div>
-        <canvas id="qr-canvas"></canvas>
-    </div>
+    <script type="text/javascript">
 
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-    <script>
-        function generateQRCode() {
-            const qrData = document.getElementById('qr-data').value;
-            const canvas = document.getElementById('qr-canvas');
-            canvas.innerHTML = '';
-            const qr = new QRious({
-                element: canvas,
-                value: qrData,
-                size: 200, 
+        function GenerateQRCode() {
+            const qrDataInput = document.getElementById("qr-data");
+            const inputData = qrDataInput.value;
+            const qrCode = new QRCodeStyling({
+                width: 300,
+                height: 300,
+                type: "canvas",
+                data: inputData,
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Bananas.svg/2560px-Bananas.svg.png",
+                dotsOptions: {
+                    color: "#4267b2",
+                    type: "rounded"
+                },
+                backgroundOptions: {
+                    color: "#e9ebee",
+                },
+                imageOptions: {
+                    crossOrigin: "anonymous",
+                    margin: 20
+                }
             });
+
+            qrCode.append(document.getElementById("canvas"));
+            //qrCode.download({ name: "qr", extension: "svg" });
         }
     </script>
 </body>
