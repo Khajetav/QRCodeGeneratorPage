@@ -9,37 +9,67 @@
     <div>
         <label for="qr-data">Enter data for QR code:</label>
         <input type="text" id="qr-data" placeholder="Enter data">
+        <label for="style">Select a style:</label>
+        <select id="style" name="style">
+            <option value="square">Square</option>
+            <option value="rounded">Rounded</option>
+            <option value="dots">Dots</option>
+            <option value="classy">Classy</option>
+            <option value="classy-rounded">Classy Rounded</option>
+            <option value="extra-rounded">Extra Rounded</option>
+        </select>
+        <label for="imageUpload">Upload an image:</label>
+        <input type="file" id="imageUpload" name="imageUpload" accept="image/*">
+
         <button onclick="GenerateQRCode()">Generate QR Code</button>
     </div>
     <div id="canvas"></div>
 
     <script type="text/javascript">
+        try {
+            function GenerateQRCode() {
+                const inputData = document.getElementById("qr-data").value;
+                const styleData = document.getElementById("style").value;
+                const imageUpload = document.getElementById("imageUpload");
+                if (imageUpload.files.length > 0) {
+                    const file = imageUpload.files[0];
+                    const reader = new FileReader();
 
-        function GenerateQRCode() {
-            const qrDataInput = document.getElementById("qr-data");
-            const inputData = qrDataInput.value;
-            const qrCode = new QRCodeStyling({
-                width: 300,
-                height: 300,
-                type: "canvas",
-                data: inputData,
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Bananas.svg/2560px-Bananas.svg.png",
-                dotsOptions: {
-                    color: "#4267b2",
-                    type: "rounded"
-                },
-                backgroundOptions: {
-                    color: "#e9ebee",
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    margin: 20
+                    reader.onload = function (e) {
+                        const imageData = e.target.result;
+
+                        const qrCode = new QRCodeStyling({
+                            width: 500,
+                            height: 500,
+                            type: "canvas",
+                            data: inputData,
+                            image: imageData,
+                            dotsOptions: {
+                                color: "#000000",
+                                type: styleData,
+                                imageSize: 1
+                            },
+                            backgroundOptions: {
+                                color: "#e9ebee",
+                            },
+                            imageOptions: {
+                                crossOrigin: "anonymous",
+                                margin: 5
+                            }
+                        });
+
+                        document.getElementById("canvas").innerHTML = "";
+                        qrCode.append(document.getElementById("canvas"));
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    console.log("No image selected.");
                 }
-            });
-
-            qrCode.append(document.getElementById("canvas"));
-            //qrCode.download({ name: "qr", extension: "svg" });
+            }
+        } catch (e) {
+            console.log(e)
         }
+       
     </script>
 </body>
 </html>
